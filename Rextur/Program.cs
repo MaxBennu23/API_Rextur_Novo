@@ -1,6 +1,9 @@
+using Microsoft.DotNet.Scaffolding.Shared.ProjectModel;
 using Microsoft.EntityFrameworkCore;
 using Rextur.Configuration;
 using Rextur.Data;
+using Rextur.Domain.Interfaces;
+using Rextur.Infra.ExternalServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,10 +16,12 @@ builder.Services.AddSwaggerGen();
 
 var connection = builder.Configuration["MySQLConnection:MySQLConnectionString"];
 
-builder.Services.AddDbContext<PassageirosContext>
-   (options => options.UseMySql(connection,
-       Microsoft.EntityFrameworkCore.ServerVersion.Parse("5.2.42-mysql")));
-//builder.Services.ResolveDependencies();
+//builder.Services.AddDbContext<PassageirosContext>
+//   (options => options.UseMySql(connection,
+//       Microsoft.EntityFrameworkCore.ServerVersion.Parse("5.2.42-mysql")));
+builder.Services.AddHttpClient();
+
+builder.Services.ResolveDependencies(builder.Configuration);
 
 var app = builder.Build();
 
